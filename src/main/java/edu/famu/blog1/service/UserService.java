@@ -101,4 +101,14 @@ public class UserService {
         DocumentSnapshot userDoc = userQuery.get();
         return userDoc.toObject(User.class);
     }
+
+    public User getUser(String userId) throws ExecutionException, InterruptedException {
+        User user = null;
+
+        DocumentReference doc = db.collection("User").document(userId);
+        ApiFuture<DocumentSnapshot> future = doc.get();
+        user = future.get().toObject(User.class);
+
+        return user;
+    }
 }

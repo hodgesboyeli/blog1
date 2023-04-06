@@ -3,6 +3,7 @@ package edu.famu.blog1.model;
 import com.google.cloud.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 

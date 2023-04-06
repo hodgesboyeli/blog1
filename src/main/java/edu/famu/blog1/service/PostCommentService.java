@@ -32,13 +32,13 @@ public class PostCommentService {
         ApiFuture<QuerySnapshot> future = query.get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
-        ArrayList<Comment> comments = documents.size() > 0 ? new ArrayList<>() : null;
+        ArrayList<PostComment> comments = documents.size() > 0 ? new ArrayList<>() : null;
         for(QueryDocumentSnapshot doc : documents)
         {
             User user = userService.getUser((DocumentReference) doc.get("authorId"));
             Post post = postService.getPost(postDoc);
 
-            comments.add(new Comment(doc.getId(),doc.getString("content"),
+            comments.add(new PostComment(doc.getId(),doc.getString("content"),
                     doc.getString("title"), doc.getBoolean("published"),
                     doc.getTimestamp("createdAt"), doc.getTimestamp("publishedAt"),
                     user, post));
