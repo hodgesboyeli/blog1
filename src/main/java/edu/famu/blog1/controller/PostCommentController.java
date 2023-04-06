@@ -1,6 +1,7 @@
 package edu.famu.blog1.controller;
 
 import com.google.api.client.util.Value;
+import edu.famu.blog1.model.RestPostComment;
 import edu.famu.blog1.service.PostCommentService;
 import edu.famu.blog1.util.ErrorMessage;
 import edu.famu.blog1.util.ResponseWrapper;
@@ -59,7 +60,7 @@ public class PostCommentController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Map<String,Object>> createComment(@RequestBody RestComment comment){
+    public ResponseEntity<Map<String,Object>> createComment(@RequestBody RestPostComment comment){
         try{
 
             payload = postCommentService.createComment(comment);
