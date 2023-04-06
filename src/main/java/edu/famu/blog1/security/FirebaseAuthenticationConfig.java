@@ -85,7 +85,7 @@ public class FirebaseAuthenticationConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable().exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint())
                 .and().authorizeRequests()
                 .antMatchers(restSecProps.getAllowedPublicApis().toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().and()//.anyRequest().authenticated().and()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated().and()
                 .addFilterBefore(new FirebaseAuthenticationFilter(authenticationManagerBean(),new FirebaseAuthenticationFailureHandler()), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
     }
