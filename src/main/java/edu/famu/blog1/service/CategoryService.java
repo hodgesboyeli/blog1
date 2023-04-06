@@ -16,25 +16,20 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class CategoryService {
-
     private Firestore db = FirestoreClient.getFirestore();
 
     public ArrayList<Category> getCategories() throws ExecutionException, InterruptedException {
 
-        Query query = db.collection("Category")
-                .orderBy("title", Query.Direction.ASCENDING);
+        Query query = db.collection("Category").orderBy("title", Query.Direction.ASCENDING);
 
         ApiFuture<QuerySnapshot> future = query.get();
-        List<QueryDocumentSnapshot> documents =
-                future.get().getDocuments();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
-        ArrayList<Category> categories = (documents.size() > 0) ?
+        ArrayList<Category> categories = documents.size() > 0 ? new ArrayList<>() : null;
 
-                new ArrayList<>() : null;
-
-        for(QueryDocumentSnapshot doc : documents)
+        for(QueryDocumentSnapshot doc : documents){
             categories.add(doc.toObject(Category.class));
-
+        }
         return categories;
     }
 }

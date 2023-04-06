@@ -1,5 +1,8 @@
 package edu.famu.blog1.controller;
 
+import com.google.api.client.util.Value;
+import edu.famu.blog1.util.ErrorMessage;
+import edu.famu.blog1.util.ResponseWrapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,28 +13,38 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-@RestController
-@RequestMapping("/api/category")
+@RestController //identified this class a controller used for REST API class.
+@RequestMapping("/api/category")//sets up the base resource url for all calls to methods in this file
 public class CategoryController {
-    private CategoryService categoryService;
+
+    CategoryService categoryService;
+
+    @Value("${response.status}")
+    private int statusCode;
+
+    @Value("${response.name}")
+    private String name;
+
+    private Object payload;
+    private ResponseWrapper response;
+    private static final String CLASS_NAME = "CategoryService";
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
+        payload = null;
     }
 
     @GetMapping("/")
-    public ResponseEntity<Map<String,Object>> getCategories() {
-        Map<String,Object> returnVal = new HashMap<>();
-        int statusCode = 500;
-
-        try {
-            Object payload = categoryService.getCategories();
+    public ResponseEntity<Map<String,Object>> getCategories(){
+        try{
+            payload = categoryService.getCategories();
             statusCode = 200;
-            returnVal.put("categories", payload);
+            name = "categories";
+        } catch (ExecutionException | InterruptedException e) {
+            payload = new ErrorMessage("Cannot fetch categories from database.",CLASS_NAME, e.toString());
         }
-        catch (ExecutionException | InterruptedException e) {
-            returnVal.put("error", e.getStackTrace());
-        }
-        return ResponseEntity.status(statusCode).body(returnVal);
+        response = new ResponseWrapper(statusCode,name, payload);
+
+        return response.getResponse();
     }
 }

@@ -9,24 +9,23 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RestPostComment extends BasePostComment {
-    private DocumentReference postId;
+public class RestPostComment extends BasePostComment{
+
     private DocumentReference authorId;
+    private DocumentReference postId;
 
-    public RestPostComment(String commentId, String content, Timestamp createdAt, boolean published, Timestamp publishedAt, String title, DocumentReference postId, DocumentReference authorId) {
-        super(commentId, content, createdAt, published, publishedAt, title);
-        this.postId = postId;
+    public RestPostComment(@Nullable String commentId, String content, String title, boolean published, Timestamp createdAt, Timestamp publishedAt, DocumentReference authorId, DocumentReference postId) {
+        super(commentId, content, title,published, createdAt,publishedAt);
         this.authorId = authorId;
+        this.postId = postId;
     }
-
-    public void setAuthorId(String authorId) {
+    public void setAuthorId(String author) {
         Firestore db = FirestoreClient.getFirestore();
-        this.authorId = db.collection("User").document(authorId);
+        this.authorId = db.collection("User").document(author);
     }
 
-    public void setPostId(String postId) {
+    public void setPostId(String post) {
         Firestore db = FirestoreClient.getFirestore();
-        this.authorId = db.collection("Post").document(postId);
+        this.postId = db.collection("Post").document(post);
     }
-
 }

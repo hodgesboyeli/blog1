@@ -8,12 +8,13 @@ import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
-public class Post extends BasePost {
-   private User authorId;
-   private ArrayList<Category> categoryId;
+public class Post extends BasePost{
 
-    public Post(String postId, String title, String content, String summary, String slug, String metaTitle, boolean published, boolean allowComments, Timestamp createAt, Timestamp publishedAt, ArrayList<String> tags, User authorId, ArrayList<Category> categoryId) {
-        super(postId, title, content, summary, slug, metaTitle, published, allowComments, createAt, publishedAt, tags);
+    private User authorId;
+    private ArrayList<Category> categoryId;
+
+    public Post(@Nullable String postId, String title, String content, String summary, String slug, String metaTitle, boolean published, boolean allowComments, @Nullable Timestamp createdAt, @Nullable  Timestamp publishedAt, ArrayList<String> tags, User authorId, ArrayList<Category> categoryId) {
+        super(postId,title,content,summary,slug,metaTitle,published,allowComments,createdAt,publishedAt,tags);
         this.authorId = authorId;
         this.categoryId = categoryId;
     }

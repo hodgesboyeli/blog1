@@ -25,9 +25,16 @@ public abstract class BasePost {
     protected String metaTitle;
     protected boolean published;
     protected boolean allowComments;
-    protected @Nullable Timestamp createAt;
+    protected @Nullable Timestamp createdAt;
     protected @Nullable Timestamp publishedAt;
     protected ArrayList<String> tags;
+
+    public void setCreatedAt(String createdAt) throws ParseException {
+        this.createdAt = Timestamp.fromProto(Timestamps.parse(createdAt));
+    }
+    public void setPublishedAt(String publishedAt) throws ParseException {
+        this.publishedAt = Timestamp.fromProto(Timestamps.parse(publishedAt));
+    }
 
     public boolean getPublished() {
         return published;
@@ -35,13 +42,5 @@ public abstract class BasePost {
 
     public boolean getAllowComments() {
         return allowComments;
-    }
-
-    public void setCreatedAt(String createdAt) throws ParseException {
-        this.createAt = Timestamp.fromProto(Timestamps.parse(createdAt));
-    }
-
-    public void setPublishedAt(String publishedAt) throws ParseException {
-        this.publishedAt = Timestamp.fromProto(Timestamps.parse(publishedAt));
     }
 }

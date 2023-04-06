@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PostComment extends BasePostComment {
+public class PostComment extends BasePostComment{
     private Post postId;
-    private Post authorId;
+    private User authorId;
 
-    public PostComment(String commentId, String content, Timestamp createdAt, boolean published, Timestamp publishedAt, String title, Post postId, Post authorId) {
-        super(commentId, content, createdAt, published, publishedAt, title);
+    public PostComment(@Nullable String commentId, String content, String title, boolean published, Timestamp createdAt, Timestamp publishedAt, User authorId, @Nullable Post postId) {
+        super(commentId,content,title,published,createdAt,publishedAt);
         this.postId = postId;
         this.authorId = authorId;
     }
