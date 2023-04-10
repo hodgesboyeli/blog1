@@ -8,11 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @SpringBootApplication
 public class Blog1Application {
-    public static void main(String[] args) {
-        // Code to be executed
+    public static void main(String[] args) throws IOException {
+        SpringApplication.run(Blog1Application.class, args);
     }
 }

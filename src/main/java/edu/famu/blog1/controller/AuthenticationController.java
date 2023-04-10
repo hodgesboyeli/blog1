@@ -61,4 +61,5 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(null);
         return "Logged out successfully";
     }
+
 }

@@ -11,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class JwtUtil {
-
     private static final Key key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
 
     public static String generateToken(UserDetails userDetails) {
@@ -33,4 +32,5 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
 }
