@@ -12,4 +12,7 @@ import java.io.IOException;
 
 @SpringBootApplication
 public class Blog1Application {
+    public static void main(String[] args) {
+        // Code to be executed
+    }
 }
