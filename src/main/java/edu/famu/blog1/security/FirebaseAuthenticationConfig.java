@@ -11,7 +11,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class FirebaseAuthenticationConfig extends WebSecurityConfigurerAdapter {
 
     private final FirebaseAuth firebaseAuth;
@@ -87,7 +91,7 @@ public class FirebaseAuthenticationConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(restSecProps.getAllowedPublicApis().toArray(String[]::new)).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated().and()
                 .addFilterBefore(new FirebaseAuthenticationFilter(authenticationManagerBean(),new FirebaseAuthenticationFailureHandler()), UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

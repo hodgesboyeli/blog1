@@ -35,12 +35,18 @@ security:
     - X-Content-Type-Options
     - Cache-Control
     - Id-Token
+    - Expires
+    - pragma
   allowed-public-apis:
     - /favicon.ico
     - /
-    - /login
-    - /register
-    - /logout
+    - /api/login
+    - /api/register
+    - /api/logout
+    - /api/category/
+    - /api/post/**
+    - /api/post/{postId:\w+}
+    - /api/post/c/{slug:\w+}
     - /css/**
     - /js/**
   exposed-headers:
