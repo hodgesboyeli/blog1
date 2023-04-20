@@ -2,19 +2,25 @@ package edu.famu.blog1.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 
 import java.util.Collections;
 
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class ResponseWrapper {
-    private int statusCode;
-    private String name;
-    private Object payload;
+    private @NonNull int statusCode;
+    private @NonNull String name;
+    private @NonNull Object payload;
+    private @Nullable HttpHeaders headers = null;
 
     public ResponseEntity getResponse()
     {
-        return ResponseEntity.status(statusCode).body(Collections.singletonMap(name, payload));
+        return ResponseEntity.status(statusCode).headers(headers).body(Collections.singletonMap(name, payload));
     }
 }

@@ -3,6 +3,8 @@ package edu.famu.blog1.security;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import edu.famu.blog1.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,7 +42,7 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String authToken = extractAuthTokenFromRequest(request);
+            String authToken = extractAuthenticationTokenFromRequest(request);
 
             if (StringUtils.hasText(authToken)) {
                 FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(authToken);
@@ -49,6 +51,19 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
                 authorities.add(new SimpleGrantedAuthority("USER"));
                 Authentication authentication = new UsernamePasswordAuthenticationToken(uid, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            else
+            {
+                authToken = extractAuthorizationTokenFromRequest(request);
+
+                if (StringUtils.hasText(authToken)) {
+                    Claims claims = JwtUtil.getClaimsFromToken(authToken);
+                    String uid = claims.getSubject();
+                    Collection<GrantedAuthority> authorities = new ArrayList<>();
+                    authorities.add(new SimpleGrantedAuthority("USER"));
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(uid, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (AuthenticationException e) {
             failureHandler.onAuthenticationFailure(request, response, e);
@@ -60,12 +75,16 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String extractAuthTokenFromRequest(HttpServletRequest request) {
+    private String extractAuthenticationTokenFromRequest(HttpServletRequest request) {
         String authToken = request.getHeader("Authorization");
         if (StringUtils.hasText(authToken) && authToken.startsWith("Bearer ")) {
             return authToken.substring(7);
         }
         return null;
+    }
+
+    private String extractAuthorizationTokenFromRequest(HttpServletRequest request) {
+        return request.getHeader("X-Auth-Token");
     }
 
 

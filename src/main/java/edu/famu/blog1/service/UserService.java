@@ -33,12 +33,6 @@ public class UserService {
 
     }
 
-    /**
-     * getUserById
-     * @param String id
-     * @return User
-     */
-
     public User getUserById(String id) throws ExecutionException, InterruptedException {
         User user = null;
 
@@ -48,12 +42,6 @@ public class UserService {
 
         return user;
     }
-
-    /**
-     * createUser
-     * @param User
-     * @return String
-     */
 
     public String createUser(User user) throws ExecutionException, InterruptedException {
 
@@ -66,13 +54,6 @@ public class UserService {
 
         return userId;
     }
-
-    /**
-     * updateUser
-     * @param String id
-     * @param Map<String,String> updateValues
-     * @return none
-     */
 
     public void updateUser(String id, Map<String, String> updateValues) {
         String [] allowed = {"firstname", "lastname", "middlename", "intro",
@@ -91,11 +72,6 @@ public class UserService {
         userDoc.update(formattedValues);
     }
 
-    /**
-     * getUser - never made publicly available
-     * @param userRef
-     * @return User
-     */
     public User getUser(DocumentReference userRef) throws ExecutionException, InterruptedException {
         ApiFuture<DocumentSnapshot> userQuery = userRef.get();
         DocumentSnapshot userDoc = userQuery.get();
@@ -110,5 +86,25 @@ public class UserService {
         user = future.get().toObject(User.class);
 
         return user;
+    }
+
+    public User getUserByUid(String uid) throws ExecutionException, InterruptedException {
+        User user = null;
+
+        Query query = db.collection("User")
+                .whereEqualTo("uid", uid);
+        ApiFuture<QuerySnapshot> future = query.get();
+        List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+
+        if(docs.size() == 1)
+            user = docs.get(0).toObject(User.class);
+
+        return user;
+    }
+
+    public void updateLastLogin(String id){
+        DocumentReference docRef = db.collection("User").document(id);
+        ApiFuture<WriteResult> writeResult = docRef.update("lastLogin", FieldValue.serverTimestamp());
+
     }
 }
